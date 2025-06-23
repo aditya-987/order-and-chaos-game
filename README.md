@@ -4,7 +4,7 @@ Order and Chaos is a strategic two-player game played on a 6×6 grid where playe
 
 ---
 
-## 🎮 How to Use
+## How to Use
 
 1. **Choose your symbol** (`X` or `O`) before making move.
 2. **Click on a cell** in the 6×6 grid to place your symbol.
