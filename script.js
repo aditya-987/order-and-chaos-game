@@ -2,15 +2,18 @@ const playing_grid = document.getElementById('playing_grid');
 
 const BOARD_SIZE = 6;
 
+// Initialize game state variables
 let round = 1;
 let moves = [0,0];
 let victory = [0,0];
 let chosen = " ";
 let numberOf4 = [0,0];
 let board;
+
 initializeGrid();
 header();
 
+// Create empty 6x6 board with clickable cells
 function initializeGrid() {
     board = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(" "));
     playing_grid.innerHTML = "";
@@ -30,6 +33,7 @@ function initializeGrid() {
     }
 }
 
+// Update header display for round/move/player info or show final result when gameOver = true
 function header(gameOver=false) {
     const header = document.getElementById('header');
     console.log(gameOver);
@@ -48,6 +52,7 @@ function header(gameOver=false) {
     }
 }
 
+// Highlight 'X' as selected symbol
 function chosenX() {
     chosen = "X";
     const x = document.getElementById('X');
@@ -56,6 +61,7 @@ function chosenX() {
     o.style.backgroundColor = "transparent";
 }
 
+// Highlight 'O' as selected symbol
 function chosenO() {
     chosen = "O";
     const x = document.getElementById('X');
@@ -64,16 +70,20 @@ function chosenO() {
     x.style.backgroundColor = "transparent";
 }
 
+// Handle click on a board cell
 function cellClicked(e) {
     const clickedCell = e.target;
 
+    // Ignore if symbol not chosen or cell already filled
     if(chosen === " " || clickedCell.innerText === "X" || clickedCell.innerText === "O") {
         return;
     }
 
+    // Mark cell and update board state
     clickedCell.innerText = chosen;
     board[clickedCell.dataset.row][clickedCell.dataset.col] = chosen;
 
+    // Toggle bold styling between Order and Chaos to show whose turn it is
     const order = document.getElementById('order');
     const chaos = document.getElementById('chaos');
     order.classList.toggle("font-bold");
@@ -82,14 +92,17 @@ function cellClicked(e) {
     console.log(clickedCell.dataset.row);
     console.log(clickedCell.dataset.col);
 
+    // Updates moves
     moves[round-1]++;
     document.getElementById('moves').innerText = `Moves: ${moves[round - 1]}`;
 
+    // Check if move results in win or board full
     checkWin();
 }
 
+// Check for win (5 in a row) or full board
 function checkWin() {
-    let dirs = [[0,1],[1,0],[1,1],[-1,1]];
+    let dirs = [[0,1],[1,0],[1,1],[-1,1]]; // Right, Down, Diagonal, Anti-diagonal
 
     for(let i=0; i<BOARD_SIZE; i++) {
         for(let j=0; j<BOARD_SIZE; j++) {
@@ -123,6 +136,7 @@ function checkWin() {
         }
     }
 
+    // If no win, check for full board
     let isBoardFull = true;
     for(let i=0; i<BOARD_SIZE; i++) {
         for(let j=0; j<BOARD_SIZE; j++) {
@@ -131,6 +145,7 @@ function checkWin() {
             }
         }
     }
+    // If full board, switch round or end game
     if(isBoardFull) {
         count4();
         if(round === 1) {
@@ -145,6 +160,7 @@ function checkWin() {
     }
 }
 
+// Count 4-in-a-row sequences for current round
 function count4() {
     let dirs = [[0,1],[1,0],[1,1],[-1,1]];
 
@@ -174,7 +190,7 @@ function count4() {
     }
 }
 
-
+// Determine final winner
 function checkVictory() {
     console.log(victory);
     console.log(moves);
@@ -203,6 +219,7 @@ function checkVictory() {
     }
 }
 
+// Reset the game by reloading the page
 function reset() {
     window.location.reload();
 }
